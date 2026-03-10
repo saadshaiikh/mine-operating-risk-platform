@@ -1,0 +1,70 @@
+version: 1
+
+feature_view: vw_mine_quarter_mvp_features
+training_view: vw_mine_quarter_mvp_training
+
+target:
+  name: had_incident_next_qtr
+  positive_class: 1
+  negative_class: 0
+  null_policy: exclude_from_training
+
+identifiers:
+  - mine_key
+  - period_key
+  - year
+  - quarter
+
+feature_columns:
+  - feat_prior_incident_count
+  - feat_rolling_4q_incident_count
+  - feat_prior_lost_day_incident_count
+  - feat_incident_rate_per_200k_hours
+  - feat_prior_violation_count
+  - feat_rolling_4q_violation_count
+  - feat_ss_share
+  - feat_assessed_penalty_amount_lag1
+  - feat_production_per_employee_hour
+  - feat_production_efficiency_qoq_delta
+  - feat_violation_burden_qoq_delta
+  - feat_deterioration_streak_count
+
+passthrough_columns:
+  - next_period_key
+  - next_quarter_exists_flag
+  - incident_count_current_qtr
+  - incident_count_prior_qtr
+  - violation_count_current_qtr
+  - violation_count_prior_qtr
+  - assessed_penalty_amount_current_qtr
+  - assessed_penalty_amount_prior_qtr
+
+imputation:
+  strategy: explicit_zero_for_baseline
+  columns:
+    feat_prior_incident_count: zero
+    feat_rolling_4q_incident_count: zero
+    feat_prior_lost_day_incident_count: zero
+    feat_incident_rate_per_200k_hours: zero
+    feat_prior_violation_count: zero
+    feat_rolling_4q_violation_count: zero
+    feat_ss_share: zero
+    feat_assessed_penalty_amount_lag1: zero
+    feat_production_per_employee_hour: zero
+    feat_production_efficiency_qoq_delta: zero
+    feat_violation_burden_qoq_delta: zero
+    feat_deterioration_streak_count: zero
+
+split:
+  time_order_columns:
+    - year
+    - quarter
+  group_column: mine_key
+
+baseline_models:
+  logistic_regression:
+    enabled: true
+    class_weight: balanced
+    max_iter: 1000
+  rule_score:
+    enabled: true

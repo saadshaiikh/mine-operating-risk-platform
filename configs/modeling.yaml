@@ -1,0 +1,66 @@
+version: 1
+
+target_column: had_incident_next_qtr
+
+feature_columns:
+  - feat_prior_incident_count
+  - feat_rolling_4q_incident_count
+  - feat_prior_lost_day_incident_count
+  - feat_incident_rate_per_200k_hours
+  - feat_prior_violation_count
+  - feat_rolling_4q_violation_count
+  - feat_ss_share
+  - feat_assessed_penalty_amount_lag1
+  - feat_production_per_employee_hour
+  - feat_production_efficiency_qoq_delta
+  - feat_violation_burden_qoq_delta
+  - feat_deterioration_streak_count
+
+risk_band_thresholds:
+  low: 0.25
+  medium: 0.50
+  high: 0.75
+
+rule_score:
+  model_name: rule_score
+  active_features:
+    - feat_incident_rate_per_200k_hours
+    - feat_prior_incident_count
+    - feat_rolling_4q_incident_count
+    - feat_prior_violation_count
+    - feat_rolling_4q_violation_count
+    - feat_ss_share
+    - feat_assessed_penalty_amount_lag1
+    - feat_production_efficiency_qoq_delta
+    - feat_violation_burden_qoq_delta
+    - feat_deterioration_streak_count
+  weights:
+    feat_incident_rate_per_200k_hours: 0.18
+    feat_prior_incident_count: 0.10
+    feat_rolling_4q_incident_count: 0.10
+    feat_prior_violation_count: 0.08
+    feat_rolling_4q_violation_count: 0.10
+    feat_ss_share: 0.10
+    feat_assessed_penalty_amount_lag1: 0.08
+    feat_production_efficiency_qoq_delta: 0.12
+    feat_violation_burden_qoq_delta: 0.08
+    feat_deterioration_streak_count: 0.06
+  winsorize:
+    lower_quantile: 0.05
+    upper_quantile: 0.95
+
+logistic_regression:
+  model_name: logreg
+  penalty: l2
+  C: 1.0
+  solver: lbfgs
+  max_iter: 1000
+  class_weight: balanced
+  random_state: 42
+
+preprocessing:
+  imputation: zero
+  scaling: standard
+
+data:
+  training_view: vw_mine_quarter_mvp_training

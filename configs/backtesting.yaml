@@ -1,0 +1,26 @@
+version: 1
+
+models:
+  - rule_score
+  - logreg
+
+validation_years:
+  - 2019
+  - 2020
+  - 2021
+
+top_fraction: 0.10
+
+minimums:
+  min_train_rows: 100
+  min_validation_rows: 30
+  require_train_both_classes: true
+
+artifacts:
+  save_predictions_csv: true
+  save_split_metrics_csv: true
+  save_model_summary_csv: true
+  save_business_claims_md: true
+
+database:
+  metrics_table: fact_backtest_result

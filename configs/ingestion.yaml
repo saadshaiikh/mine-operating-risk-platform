@@ -1,0 +1,29 @@
+msha:
+  delimiter: "|"
+  encoding: "latin-1"
+  batch_size: 5000
+  strict: true
+  load_order:
+    - msha_mines
+    - msha_employment_production_quarterly
+    - msha_incidents
+    - msha_violations
+    - msha_assessed_violations
+  required_columns:
+    msha_mines:
+      - mine_id
+    msha_employment_production_quarterly:
+      - mine_id
+      - year
+      - quarter
+      - subunit_code
+    msha_incidents:
+      - document_number
+      - mine_id
+      - incident_date
+    msha_violations:
+      - mine_id
+      - violation_date
+    msha_assessed_violations:
+      - mine_id
+      - assessed_date

@@ -1,0 +1,71 @@
+msha:
+  owner: "Mine Safety and Health Administration (MSHA)"
+  refresh_cadence: "Weekly (Friday afternoon) full-file replacement unless otherwise noted"
+  file_format: "Zip archives containing pipe-delimited text with header row"
+  base_url: "https://arlweb.msha.gov/OpenGovernmentData/DataSets"
+  datasets:
+    msha_mines:
+      label: "Mines Data Set"
+      source_url: "https://arlweb.msha.gov/OpenGovernmentData/DataSets/Mines.zip"
+      definition_url: "https://arlweb.msha.gov/OpenGovernmentData/DataSets/Mines_Definition_File.txt"
+      delimiter: "|"
+      landing_filename: "Mines.zip"
+      extracted_filename: "Mines.txt"
+      raw_filename: "mines"
+      expected_key: "mine_id"
+      key_strategy: "mine_id"
+      grain: "One row per mine_id (current snapshot)"
+      stage_table: "stg_msha_mines"
+      required: true
+    msha_employment_production_quarterly:
+      label: "Employment/Production Data Set (Quarterly)"
+      source_url: "https://arlweb.msha.gov/OpenGovernmentData/DataSets/MinesProdQuarterly.zip"
+      definition_url: "https://arlweb.msha.gov/OpenGovernmentData/DataSets/MineSProdQuarterly_Definition_File.txt"
+      delimiter: "|"
+      landing_filename: "MinesProdQuarterly.zip"
+      extracted_filename: "MinesProdQuarterly.txt"
+      raw_filename: "employment_production_quarterly"
+      expected_key: null
+      key_strategy: "composite: mine_id + subunit_cd + cal_yr + cal_qtr (hash)"
+      grain: "One row per mine_id + subunit_cd + cal_yr + cal_qtr"
+      stage_table: "stg_msha_employment_production"
+      required: true
+    msha_incidents:
+      label: "Accident Injuries Data Set"
+      source_url: "https://arlweb.msha.gov/OpenGovernmentData/DataSets/Accidents.zip"
+      definition_url: "https://arlweb.msha.gov/OpenGovernmentData/DataSets/Accidents_Definition_File.txt"
+      delimiter: "|"
+      landing_filename: "Accidents.zip"
+      extracted_filename: "Accidents.txt"
+      raw_filename: "accidents_injuries"
+      expected_key: "document_number"
+      key_strategy: "document_number"
+      grain: "One row per accident/injury/illness report (document_number)"
+      stage_table: "stg_msha_incidents"
+      required: true
+    msha_violations:
+      label: "Violations Data Set"
+      source_url: "https://arlweb.msha.gov/OpenGovernmentData/DataSets/Violations.zip"
+      definition_url: "https://arlweb.msha.gov/OpenGovernmentData/DataSets/Violations_Definition_File.txt"
+      delimiter: "|"
+      landing_filename: "Violations.zip"
+      extracted_filename: "Violations.txt"
+      raw_filename: "violations"
+      expected_key: null
+      key_strategy: "violation_no if present, else composite hash"
+      grain: "One row per citation/order (violation_no)"
+      stage_table: "stg_msha_violations"
+      required: true
+    msha_assessed_violations:
+      label: "Assessed Violations Data Set"
+      source_url: "https://arlweb.msha.gov/OpenGovernmentData/DataSets/AssessedViolations.zip"
+      definition_url: "https://arlweb.msha.gov/OpenGovernmentData/DataSets/Assessed_Violations_Definition_File.txt"
+      delimiter: "|"
+      landing_filename: "AssessedViolations.zip"
+      extracted_filename: "AssessedViolations.txt"
+      raw_filename: "assessed_violations"
+      expected_key: null
+      key_strategy: "violation_no if present, else composite hash"
+      grain: "One row per assessed violation (case/violation record)"
+      stage_table: "stg_msha_assessed_violations"
+      required: true
