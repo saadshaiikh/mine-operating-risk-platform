@@ -122,5 +122,5 @@ Note: the hosted demo may use a reduced sample dataset due to free‑tier storag
 - Optional Canada/weather enrichment
 - Expanded explainability
 
-## Portfolio‑Ready Summary
+## Summary
 Mine Operating Risk MVP is an operating review and risk prioritization system for mining operations. It integrates production, safety, and compliance data to surface higher‑risk mine‑quarters and guide structured quarterly performance reviews, not just a standalone machine‑learning exercise.
