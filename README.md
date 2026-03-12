@@ -68,26 +68,30 @@ Naive baseline pooled:
 
 The logistic model beat the naive baseline in every year and in pooled performance.
 
-## Dashboard and Demo Screens
+## Glimpse Dashboard and Demo Screens
+
 Executive Overview
 
-![Executive Overview](docs/images/executive_overview.png)
+<img width="690" height="581" alt="Screenshot 2026-03-12 at 2 51 41 AM" src="https://github.com/user-attachments/assets/dfdd24d3-94d8-4148-81d4-d4a771a00605" />
 
 Top‑Risk Mines
 
-![Top‑Risk Mines](docs/images/top_risk_mines.png)
+<img width="707" height="1371" alt="Screenshot 2026-03-12 at 3 43 14 AM" src="https://github.com/user-attachments/assets/b14ea80f-4458-4743-bd4d-55868b885b5e" />
 
 Mine Detail Drill‑Through
 
-![Mine Detail Drill‑Through](docs/images/mine_detail_drillthrough.png)
+<img width="672" height="1569" alt="Screenshot 2026-03-12 at 3 43 26 AM" src="https://github.com/user-attachments/assets/30db9f59-151f-45ce-bf9f-0dfd6c934cab" />
+
 
 Backtest Performance
 
-![Backtest Performance](docs/images/backtest_performance.png)
+<img width="687" height="1360" alt="Screenshot 2026-03-12 at 3 43 37 AM" src="https://github.com/user-attachments/assets/92d5cf85-aa37-471c-b79c-b65a2dc866b4" />
+
 
 Governance & Freshness
 
-![Governance & Freshness](docs/images/governance_freshness.png)
+<img width="705" height="881" alt="Screenshot 2026-03-12 at 3 43 45 AM" src="https://github.com/user-attachments/assets/eb2ff8e9-1eb7-4335-b308-b5c27e31d8e7" />
+
 
 ## How to Run Locally
 Requirements:
