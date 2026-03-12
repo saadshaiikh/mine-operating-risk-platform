@@ -61,14 +61,16 @@ def unzip_source(zip_path: Path, output_dir: Path, target_name: str) -> Path:
     extracted = output_dir / member.filename
     target_path = output_dir / f"{target_name}.txt"
     if extracted.name != target_path.name:
-        if target_path.exists():
-            try:
-                if extracted.samefile(target_path):
-                    return target_path
-            except FileNotFoundError:
-                pass
-            target_path.unlink()
-        shutil.move(str(extracted), str(target_path))
+        if extracted.name.lower() == target_path.name.lower():
+            temp_path = output_dir / f".{target_name}.tmp"
+            if temp_path.exists():
+                temp_path.unlink()
+            shutil.move(str(extracted), str(temp_path))
+            shutil.move(str(temp_path), str(target_path))
+        else:
+            if target_path.exists():
+                target_path.unlink()
+            shutil.move(str(extracted), str(target_path))
     return target_path
 
 

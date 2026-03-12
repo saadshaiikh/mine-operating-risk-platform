@@ -6,6 +6,7 @@ from pathlib import Path
 from typing import Any
 
 from src.common.db import delete_run_rows, insert_rows
+from src.common.logging import get_logger, log_event
 from src.common.hash import row_hash, sha256_text
 from src.transforms.staging.helpers import (
     ensure_required_columns,
@@ -73,11 +74,15 @@ def stage_dataset(
     conn,
 ) -> dict[str, Any]:
     start = time.monotonic()
+    logger = get_logger("stg_msha_employment_production")
+    effective_batch_size = min(batch_size, 1000)
+    progress_interval = 50000
 
     headers, rows = read_pipe_rows(txt_path, delimiter=delimiter, encoding=encoding)
     ensure_required_columns(headers, required_columns, CANDIDATES)
 
     delete_run_rows(conn, TABLE_NAME, run_id)
+    conn.commit()
 
     columns = [
         "run_id",
@@ -99,6 +104,7 @@ def stage_dataset(
     rows_read = 0
     rows_loaded = 0
     rows_rejected = 0
+    next_log_threshold = progress_interval
 
     for raw_row in rows:
         rows_read += 1
@@ -161,17 +167,45 @@ def stage_dataset(
             rows_rejected += 1
             continue
 
-        if len(batch) >= batch_size:
-            insert_rows(conn, TABLE_NAME, columns, batch, page_size=batch_size)
+        if len(batch) >= effective_batch_size:
+            insert_rows(conn, TABLE_NAME, columns, batch, page_size=effective_batch_size)
             rows_loaded += len(batch)
+            conn.commit()
             batch.clear()
 
+        if rows_read >= next_log_threshold:
+            log_event(
+                logger,
+                {
+                    "event": "stage_progress",
+                    "run_id": run_id,
+                    "stage_table": TABLE_NAME,
+                    "rows_read": rows_read,
+                    "rows_loaded": rows_loaded,
+                    "rows_rejected": rows_rejected,
+                },
+            )
+            next_log_threshold += progress_interval
+
     if batch:
-        insert_rows(conn, TABLE_NAME, columns, batch, page_size=batch_size)
+        insert_rows(conn, TABLE_NAME, columns, batch, page_size=effective_batch_size)
         rows_loaded += len(batch)
+        conn.commit()
         batch.clear()
 
     duration = time.monotonic() - start
+
+    log_event(
+        logger,
+        {
+            "event": "stage_complete",
+            "run_id": run_id,
+            "stage_table": TABLE_NAME,
+            "rows_read": rows_read,
+            "rows_loaded": rows_loaded,
+            "rows_rejected": rows_rejected,
+        },
+    )
 
     return {
         "run_id": run_id,

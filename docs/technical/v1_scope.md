@@ -4,10 +4,13 @@
 - V1 entity = mine
 - V1 time grain = quarter
 - V1 label = had_incident_next_qtr
-- V1 geography = US-only operational backbone
+- V1 geography = US-only
 - V1 data sources = MSHA only
-- V1 input tables = incidents, violations, assessed violations, employment/production, mine metadata
-- V1 outputs = mine-quarter base, label, MVP features, baseline model, first backtest
+- V1 inputs = mines, employment/production, incidents, violations
+- V1 assessed violations = deferred to Phase 2
+- V1 outputs = mine-quarter base, labels, MVP features, logistic model, rolling backtest
+- Active feature set = 11 features
+- Active validation years = 2019, 2020, 2021
 - Out of scope for V1 = Canada joins, weather, Power BI polish, Word/PPT automation
 
 ## Modeling Problem Statement

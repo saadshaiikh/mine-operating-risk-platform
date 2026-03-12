@@ -39,16 +39,6 @@ violation_agg AS (
         v.mine_key,
         v.violation_quarter
 ),
-assessed_agg AS (
-    SELECT
-        av.mine_key,
-        av.assessed_quarter AS period_key,
-        COALESCE(SUM(av.penalty_amount), 0) AS assessed_penalty_amount_current_qtr
-    FROM fact_msha_assessed_violation av
-    GROUP BY
-        av.mine_key,
-        av.assessed_quarter
-),
 current_joined AS (
     SELECT
         b.mine_key,
@@ -61,7 +51,7 @@ current_joined AS (
         b.production_unit,
         COALESCE(i.incident_count_current_qtr, 0) AS incident_count_current_qtr,
         COALESCE(v.violation_count_current_qtr, 0) AS violation_count_current_qtr,
-        COALESCE(a.assessed_penalty_amount_current_qtr, 0) AS assessed_penalty_amount_current_qtr
+        0::BIGINT AS assessed_penalty_amount_current_qtr
     FROM ep_base b
     LEFT JOIN incident_agg i
         ON b.mine_key = i.mine_key
@@ -69,9 +59,6 @@ current_joined AS (
     LEFT JOIN violation_agg v
         ON b.mine_key = v.mine_key
        AND b.period_key = v.period_key
-    LEFT JOIN assessed_agg a
-        ON b.mine_key = a.mine_key
-       AND b.period_key = a.period_key
 ),
 with_prior_values AS (
     SELECT
@@ -94,10 +81,7 @@ with_prior_values AS (
             ORDER BY cj.year, cj.quarter
         ) AS violation_count_prior_qtr,
         cj.assessed_penalty_amount_current_qtr,
-        LAG(cj.assessed_penalty_amount_current_qtr) OVER (
-            PARTITION BY cj.mine_key
-            ORDER BY cj.year, cj.quarter
-        ) AS assessed_penalty_amount_prior_qtr
+        NULL::BIGINT AS assessed_penalty_amount_prior_qtr
     FROM current_joined cj
 )
 SELECT

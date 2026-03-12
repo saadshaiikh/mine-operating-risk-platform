@@ -32,7 +32,14 @@ def get_git_commit() -> str | None:
         return None
 
 
-def build_model_version(model_name: str, train_end_year: int, validation_year: int) -> str:
+def build_model_version(
+    model_name: str,
+    train_end_year: int,
+    validation_year: int,
+    version_tag: str | None = None,
+) -> str:
+    if version_tag:
+        return f"{model_name}_v1_{version_tag}_train_to_{train_end_year}_validate_{validation_year}"
     return f"{model_name}_v1_train_to_{train_end_year}_validate_{validation_year}"
 
 

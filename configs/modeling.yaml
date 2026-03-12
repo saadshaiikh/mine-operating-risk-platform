@@ -10,7 +10,6 @@ feature_columns:
   - feat_prior_violation_count
   - feat_rolling_4q_violation_count
   - feat_ss_share
-  - feat_assessed_penalty_amount_lag1
   - feat_production_per_employee_hour
   - feat_production_efficiency_qoq_delta
   - feat_violation_burden_qoq_delta
@@ -51,6 +50,7 @@ rule_score:
 
 logistic_regression:
   model_name: logreg
+  version_tag: mvp11
   penalty: l2
   C: 1.0
   solver: lbfgs

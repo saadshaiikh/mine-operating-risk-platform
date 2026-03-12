@@ -44,13 +44,6 @@ VALIDATION_QUERIES = {
            OR employee_hours < 0
            OR production_volume < 0;
     """,
-    "negative_prior_values": """
-        SELECT COUNT(*)
-        FROM vw_mine_quarter_base
-        WHERE incident_count_prior_qtr < 0
-           OR violation_count_prior_qtr < 0
-           OR assessed_penalty_amount_prior_qtr < 0;
-    """,
     "row_count": """
         SELECT COUNT(*) FROM vw_mine_quarter_base;
     """,

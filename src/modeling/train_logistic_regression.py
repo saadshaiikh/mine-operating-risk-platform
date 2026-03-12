@@ -75,7 +75,12 @@ def train_logistic_regression(
     )
 
     train_end_year = validation_year - 1
-    model_version = build_model_version(logreg_cfg["model_name"], train_end_year, validation_year)
+    model_version = build_model_version(
+        logreg_cfg["model_name"],
+        train_end_year,
+        validation_year,
+        version_tag=logreg_cfg.get("version_tag"),
+    )
 
     output_rows = prepare_fact_risk_score_rows(scored, model_version, label_col=target_col)
 

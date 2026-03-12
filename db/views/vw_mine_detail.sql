@@ -43,16 +43,16 @@ SELECT
     s.top_driver_3,
     s.label_next_period,
 
-    f.avg_employees,
-    f.employee_hours,
-    f.production_volume,
-    f.production_unit,
-    f.incident_count_current_qtr,
-    f.incident_count_prior_qtr,
-    f.violation_count_current_qtr,
-    f.violation_count_prior_qtr,
-    f.assessed_penalty_amount_current_qtr,
-    f.assessed_penalty_amount_prior_qtr,
+    l.avg_employees,
+    l.employee_hours,
+    l.production_volume,
+    l.production_unit,
+    l.incident_count_current_qtr,
+    l.incident_count_prior_qtr,
+    l.violation_count_current_qtr,
+    l.violation_count_prior_qtr,
+    l.assessed_penalty_amount_current_qtr,
+    l.assessed_penalty_amount_prior_qtr,
 
     f.lost_day_incident_count_current_qtr,
     f.ss_violation_count_current_qtr,
@@ -69,7 +69,6 @@ SELECT
     f.feat_prior_violation_count,
     f.feat_rolling_4q_violation_count,
     f.feat_ss_share,
-    f.feat_assessed_penalty_amount_lag1,
     f.feat_production_per_employee_hour,
     f.feat_production_efficiency_qoq_delta,
     f.feat_violation_burden_qoq_delta,
@@ -77,6 +76,9 @@ SELECT
 FROM scored s
 LEFT JOIN dim_mine dm
     ON s.mine_key = dm.mine_key
+LEFT JOIN vw_mine_quarter_labels l
+    ON s.mine_key = l.mine_key
+   AND s.period_key = l.period_key
 LEFT JOIN vw_mine_quarter_mvp_features f
     ON s.mine_key = f.mine_key
    AND s.period_key = f.period_key;

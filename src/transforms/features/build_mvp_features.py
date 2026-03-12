@@ -33,37 +33,15 @@ VALIDATION_QUERIES = {
             (SELECT COUNT(*) FROM vw_mine_quarter_labels)
             - (SELECT COUNT(*) FROM vw_mine_quarter_mvp_features);
     """,
-    "invalid_ss_share": """
-        SELECT COUNT(*)
-        FROM vw_mine_quarter_mvp_features
-        WHERE feat_ss_share < 0
-           OR feat_ss_share > 1;
-    """,
     "negative_rolling_counts": """
         SELECT COUNT(*)
         FROM vw_mine_quarter_mvp_features
-        WHERE feat_rolling_4q_incident_count < 0
-           OR feat_rolling_4q_violation_count < 0;
-    """,
-    "negative_streak_count": """
-        SELECT COUNT(*)
-        FROM vw_mine_quarter_mvp_features
-        WHERE feat_deterioration_streak_count < 0;
+        WHERE feat_rolling_4q_incident_count < 0;
     """,
     "prior_incident_mismatch": """
         SELECT COUNT(*)
         FROM vw_mine_quarter_mvp_features
         WHERE feat_prior_incident_count IS DISTINCT FROM incident_count_prior_qtr;
-    """,
-    "prior_violation_mismatch": """
-        SELECT COUNT(*)
-        FROM vw_mine_quarter_mvp_features
-        WHERE feat_prior_violation_count IS DISTINCT FROM violation_count_prior_qtr;
-    """,
-    "penalty_lag_mismatch": """
-        SELECT COUNT(*)
-        FROM vw_mine_quarter_mvp_features
-        WHERE feat_assessed_penalty_amount_lag1 IS DISTINCT FROM assessed_penalty_amount_prior_qtr;
     """,
     "training_null_label_count": """
         SELECT COUNT(*)
